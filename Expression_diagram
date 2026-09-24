@@ -1,0 +1,20 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+expression_data = pd.read_csv("C:/Users/1/Downloads/gene_expression.csv")
+print(expression_data)
+expression_data["Mean_expression"] = expression_data.iloc[:,1:].mean(axis=1) #добавляем в таблицу еще один столбец со средним арифметическим строк(начиная со второго столбца; числа)
+print(expression_data)
+sorted_data = expression_data.sort_values(by='Mean_expression', ascending=False)
+import mygene
+mg = mygene.MyGeneInfo()
+gene_symbol = 'Mmp12'
+gene_info = mg.query(gene_symbol)
+print(gene_info)
+top_n = 10
+plt.bar(sorted_data['gene symbol'][:top_n], sorted_data['Mean_expression'][:top_n])
+plt.xlabel('Gene')
+plt.ylabel('Mean Expression')
+plt.title(f'Top {top_n} Genes with Highest Mean Expression')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
