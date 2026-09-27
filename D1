@@ -1,0 +1,4 @@
+#Подсчет нуклеотидов
+from collections import Counter
+def count_nucleotides(dna: str) -> dict:
+    return dict(Counter(dna))
