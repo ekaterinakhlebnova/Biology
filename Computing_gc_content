@@ -1,0 +1,12 @@
+#библиотека для работы с текстовыми файлами SeqIO. Читает фаста-файлы
+
+from Bio import SeqIO
+percentage_gc = 0
+max_for_id = ''
+for record in SeqIO.parse('rosalind_gc.txt', 'fasta'):
+    dna = str(record.seq)
+    if (dna.count('G')+dna.count('C'))/len(dna)*100 > percentage_gc:
+        percentage_gc = (dna.count('G')+dna.count('C'))/len(dna)*100
+        max_for_id = record.id
+
+print(max_for_id, percentage_gc, sep = '\n')
