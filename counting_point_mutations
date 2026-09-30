@@ -1,0 +1,12 @@
+#обратить внимание на splitlines() - разделитель строк по \n, можно в скобках задать другое правило разделения
+#посмотреть на оборот for char1,... in zip()
+#называть переменные полностью
+with open('rosalind_hamm.txt', 'r') as file:
+    lines = file.read().splitlines()
+    dna1 = lines[0]
+    dna2 = lines[1]
+    mutation_count = 0
+    for str1, str2 in zip(dna1, dna2):
+        if str1!=str2:
+            mutation_count+=1
+    print(mutation_count)
