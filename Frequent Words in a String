@@ -1,0 +1,23 @@
+'''Мы говорим, что Pattern является наиболее часто встречающимся k -мером в Text , если он максимизирует Count ( Text , Pattern ) среди всех k-меров . Например, "ACTAT" является наиболее часто встречающимся 5-мером в "ACAACTATGCATCACTATCGGGAACTATCCT", а "ATA" является наиболее часто встречающимся 3-мером в "CGATATATCCATAG".
+
+Проблема с часто используемыми словами
+Найдите наиболее часто встречающиеся k-меры в строке.
+
+Дано: строка ДНК « Text» и целое число k .
+
+Возвращает: Все наиболее часто встречающиеся k- меры в тексте (в любом порядке).'''
+
+dict_kmers = {}
+with open('rosalind_ba1b (1).txt', 'r') as file:
+    lines = file.read().splitlines()
+    k = int(lines[1])
+    dna = lines[0]
+    for i in range(len(dna) - k +1):
+        curr_kmer = dna[i:i+k]
+        if curr_kmer not in dict_kmers:
+            dict_kmers[curr_kmer] = 1
+        else:
+            dict_kmers[curr_kmer] +=1
+
+    max_kmer = max(dict_kmers, key = dict_kmers.get)
+    print(max_kmer)
