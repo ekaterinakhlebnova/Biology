@@ -1,0 +1,61 @@
+def needleman_wunsch(seq1, seq2, match=1, mismatch=-1, gap=-1):
+    n = len(seq1)
+    m = len(seq2)
+    
+    # 1. Инициализация матрицы динамического программирования (DP)
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    
+    # Заполнение базовых штрафов за гэпы по краям
+    for i in range(n + 1):
+        dp[i][0] = i * gap
+    for j in range(m + 1):
+        dp[0][j] = j * gap
+        
+    # 2. Заполнение матрицы DP
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            # Проверяем, совпадают ли символы
+            score_match = match if seq1[i-1] == seq2[j-1] else mismatch
+            
+            # Выбираем максимум из трех путей:
+            match_mismatch = dp[i-1][j-1] + score_match  # по диагонали
+            delete = dp[i-1][j] + gap                     # сверху (гэп в seq2)
+            insert = dp[i][j-1] + gap                     # слева (гэп в seq1)
+            
+            dp[i][j] = max(match_mismatch, delete, insert)
+            
+    # 3. Обратный ход (Traceback) для восстановления выравнивания
+    align1 = []
+    align2 = []
+    
+    i, j = n, m
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and dp[i][j] == dp[i-1][j-1] + (match if seq1[i-1] == seq2[j-1] else mismatch):
+            align1.append(seq1[i-1])
+            align2.append(seq2[j-1])
+            i -= 1
+            j -= 1
+        elif i > 0 and dp[i][j] == dp[i-1][j] + gap:
+            align1.append(seq1[i-1])
+            align2.append("-")
+            i -= 1
+        else:
+            align1.append("-")
+            align2.append(seq2[j-1])
+            j -= 1
+            
+    # Так как мы шли с конца, переворачиваем строки
+    align1 = "".join(reversed(align1))
+    align2 = "".join(reversed(align2))
+    
+    return dp[n][m], align1, align2
+
+# --- Пример использования ---
+sequence_a = "GATTACA"
+sequence_b = "GCATGCU"
+
+score, res1, res2 = needleman_wunsch(sequence_a, sequence_b, match=1, mismatch=-1, gap=-1)
+
+print(f"Оптимальный балл выравнивания: {score}")
+print(f"Последовательность 1: {res1}")
+print(f"Последовательность 2: {res2}")
