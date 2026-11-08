@@ -1,0 +1,10 @@
+seq = "GATTTGGGGTTCAAAGCAGT"
+qual_string = "!''*((((***+))%%%++"
+
+# Считаем сумму Phred-баллов для каждого символа в одну строку
+total_score = sum(ord(char) - 33 for char in qual_string)
+
+# Находим среднее, разделив на длину строки
+average_quality = total_score / len(qual_string)
+
+print(average_quality) # Выведет ~14.2
