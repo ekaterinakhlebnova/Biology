@@ -1,0 +1,17 @@
+from Bio import SeqIO
+import gzip
+count_GC = 0
+tot_len_of_reads = 0
+with gzip.open("SRR41616701.fastq.gz", 'rt') as raw_reads, open('clean_data.fastq', 'w') as clean_reads:
+    for read in SeqIO.parse(raw_reads, 'fastq'):
+        seq_Q = read.letter_annotations['phred_quality']
+        tot = sum(seq_Q)/len(read)
+
+        if tot >= 30:
+            SeqIO.write(read, clean_reads, 'fastq')
+            for nuc in read:
+                if nuc == 'C'or nuc == 'G':
+                    count_GC+=1
+            tot_len_of_reads+=len(read)
+percentageGC = (count_GC/tot_len_of_reads)*100
+print(f"Анализ завершен! Общий GC-состав:{percentageGC:.2f}%")
